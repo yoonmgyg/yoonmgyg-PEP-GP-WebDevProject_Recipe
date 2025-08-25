@@ -1,7 +1,7 @@
-commit faa85f22e3b5d7ea6fe48f220fb23a98534e9fdb
+commit 2cca9159a34642f268eed805666d25b84c5fd488
 Author: yoonmgyg <yoonmgyg@gmail.com>
-Date:   Mon Aug 25 18:50:15 2025 +0000
+Date:   Mon Aug 25 19:07:22 2025 +0000
 
-    Fixed typos and href
+    Changed alerts to notify
 
- 13 files changed, 46 insertions(+), 40 deletions(-)
+ 5 files changed, 64 insertions(+), 72 deletions(-)

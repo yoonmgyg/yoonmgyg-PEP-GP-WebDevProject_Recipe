@@ -205,6 +205,10 @@ window.addEventListener("DOMContentLoaded", () => {
      * - On success: refresh the list
      */
     async function deleteRecipe() {        
+        if (!isAdmin()) {
+            alert("Not authorized to delete recipes");
+            return;
+        }
         const name =  deleteNameInput.value.trim();
         if (!name) {
             notify("Invalid name");
