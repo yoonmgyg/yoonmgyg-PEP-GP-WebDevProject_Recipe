@@ -1,7 +1,7 @@
-commit 2cca9159a34642f268eed805666d25b84c5fd488
+commit 453cf047593297fa45b811a910d27393321c58a3
 Author: yoonmgyg <yoonmgyg@gmail.com>
-Date:   Mon Aug 25 19:07:22 2025 +0000
+Date:   Mon Aug 25 19:10:36 2025 +0000
 
-    Changed alerts to notify
+    added admin check for deletion
 
- 5 files changed, 64 insertions(+), 72 deletions(-)
+ 3 files changed, 12 insertions(+), 4 deletions(-)
