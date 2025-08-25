@@ -11,7 +11,7 @@ const BASE_URL = "http://localhost:8081"; // backend URL
  * - login button
  * - logout button (optional, for token testing)
  */
-const usernameInput = document.getElementById("username-input");
+const usernameInput = document.getElementById("login-input");
 const passwordInput = document.getElementById("password-input");
 const loginButton = document.getElementById("login-button");
 const logoutButton = document.getElementById("logout-button");
@@ -20,9 +20,8 @@ const logoutButton = document.getElementById("logout-button");
  * TODO: Add click event listener to login button
  * - Call processLogin on click
  */
-if (loginButton) {
-    loginButton.addEventListener("click", progessLogin);
-}
+if (loginButton) loginButton.addEventListener("click", processLogin);
+
 
 /**
  * TODO: Process Login Function
@@ -45,7 +44,7 @@ if (loginButton) {
  * - Use sessionStorage.setItem("key", value) to store auth token and admin flag
  * - Use `window.location.href` for redirection
  */
-async function processLogin() {
+async function processLogin(event) {
     // TODO: Retrieve username and password from input fields
     // - Trim input and validate that neither is empty
     event.preventDefault();
@@ -79,7 +78,7 @@ async function processLogin() {
         if (response.status == 200) {
             const text = await response.text();
             const [token, isAdmin] = text.split(/\s+/);
-            sessionStorage.setItem("token", token || "");
+            sessionStorage.setItem("auth-token", token || "");
             sessionStorage.setItem("isAdmin", String(isAdmin));
             // TODO: Optionally show the logout button if applicable
             if (logoutButton) {
@@ -88,7 +87,7 @@ async function processLogin() {
             // TODO: Add a small delay (e.g., 500ms) using setTimeout before redirecting
             // - Use window.location.href to redirect to the recipe page
             setTimeout(() => {
-                window.location.href="recipe-page.html";
+                window.location.href="../recipes/recipe-page.html";
             }, 500);
             return;
         }
@@ -103,7 +102,7 @@ async function processLogin() {
         }
         // TODO: For any other status code
         // - Alert the user with a generic error like "Unknown issue!"
-        const msg = await resposnse.text().catch(() => "");
+        const msg = await response.text().catch(() => "");
         alert(msg || "Unknown issue!");
 
     } catch (error) {

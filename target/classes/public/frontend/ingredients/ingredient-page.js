@@ -13,20 +13,41 @@ const BASE_URL = "http://localhost:8081"; // backend URL
  * - adminLink (if visible conditionally)
  */
 
-/* 
- * TODO: Attach 'onclick' events to:
+const addIngredientInput = document.getElementById("add-ingredient-name-input");
+const deleteIngredientInput = document.getElementById("delete-ingredient-name-input");
+
+const ingredientListContainer = document.getElementById("ingredient-list");
+
+const addIngredientBtn = document.getElementById("add-ingredient-submit-button");
+const deleteIngredientBtn = document.getElementById("delete-ingredient-submit-button");
+
+const searchInput = document.getElementById("search-input");
+const adminLink = document.getElementById("back-link");
+
+const getAuth = () => sessionStorage.getItem("auth-token") || "";
+const isAdmin = () => sessionStorage.getItem("isAdmin") === "true";
+const ingredientHeaders = () => {
+    const head = { "Content-Type": "application/json" }
+    const token = getAuth();
+    if (token) head.Authorization = `Bearer ${token}`;
+    return head;
+}
+
+/* TODO: Attach 'onclick' events to:
  * - "add-ingredient-submit-button" → addIngredient()
  * - "delete-ingredient-submit-button" → deleteIngredient()
  */
-
+if (addIngredientInput) addIngredientBtn.addEventListener("click", addIngredient);
+if (deleteIngredientInput) deleteIngredientBtn.addEventListener("click", deleteIngredient);
 /*
  * TODO: Create an array to keep track of ingredients
  */
+let ingredients = [];
 
 /* 
  * TODO: On page load, call getIngredients()
  */
-
+getIngredients().catch(console.error);
 
 /**
  * TODO: Add Ingredient Function
@@ -40,7 +61,29 @@ const BASE_URL = "http://localhost:8081"; // backend URL
  * - On failure: alert the user
  */
 async function addIngredient() {
-    // Implement add ingredient logic here
+    const name = addIngredientInput.value.trim();
+    if (!name) {
+        alert("Invalid name");
+        return;
+    }
+    try {
+        const response = await fetch(`${BASE_URL}/ingredients`, {
+            method: "POST",
+            headers: ingredientHeaders(),
+            body: JSON.stringify(body)
+        });
+        if (response.status === 201 || response.ok) {
+            addIngredientInput.value = "";
+            await getIngredients();
+            alert("Ingredient added");
+        } else {
+            const msg = await response.text().catch(() => "");
+            alert(msg || "Failed to add ingredients");
+        }
+    } catch (err) {
+        console.error("Add ingredient error:", err);
+        alert("Add ingredient failed");
+    }
 }
 
 
@@ -55,6 +98,24 @@ async function addIngredient() {
  */
 async function getIngredients() {
     // Implement get ingredients logic here
+    try {
+        const response = await fetch(`${BASE_URL}/ingredients`, {
+            method: "GET",
+            headers: ingredientHeaders(),
+        });
+        if (response.status === 201 || response.ok) {
+            const data = await response.text().catch(() => "");
+            ingredients = data;
+            refreshIngredientList();
+        } else {
+            const msg = await response.text().catch(() => "");
+            alert(msg || "Failed to get ingredients");
+            return;
+        }
+    } catch (err) {
+        console.error("Get ingredient error:", err);
+        alert("Get ingredient failed");
+    }
 }
 
 
@@ -71,6 +132,36 @@ async function getIngredients() {
  */
 async function deleteIngredient() {
     // Implement delete ingredient logic here
+    const name = deleteIngredientInput.value.trim();
+    if (!name) {
+        alert("Invalid name");
+        return;
+    }
+    try {
+        if (!ingredientListContainer.length) await getIngredients();
+        const match = ingredients.find(r => String(r.name).toLowerCase() === name.toLowerCase());
+        if (!match) {
+            alert("Could not find a match for the ingredient");
+            return;
+        }
+
+        const url = `${BASE_URL}/recipes/${encodeURIComponent(match.id)}`;
+        const response = await fetch(url, {
+            method: "DELETE",
+            header: ingredientHeaders(),
+        });
+        if (response.ok) {
+            deleteIngredientInput.value = "";
+            await getIngredients();
+            alert("Ingredient deleted");
+        } else {
+            const msg = await response.text().catch(() => "");
+            alert(msg || "Failed to delete ingredient");
+        }
+    } catch (err) {
+        console.error("Delte error:", err);
+        alert("Delete failed");
+    }
 }
 
 
@@ -86,4 +177,12 @@ async function deleteIngredient() {
  */
 function refreshIngredientList() {
     // Implement ingredient list rendering logic here
+    ingredientListContainer.innerHTML = "";
+    ingredients.forEach(r => {
+        const li = document.createElement("li");
+        const name = r.name;
+        const instructions = r.instructions;
+        li.textContent = `${name}: ${instructions}`;
+        ingredientListContainer.appendChild(li);
+    });
 }
