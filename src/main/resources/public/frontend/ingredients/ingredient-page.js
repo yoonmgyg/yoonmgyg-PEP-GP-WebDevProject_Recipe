@@ -70,19 +70,19 @@ async function addIngredient() {
         const response = await fetch(`${BASE_URL}/ingredients`, {
             method: "POST",
             headers: ingredientHeaders(),
-            body: JSON.stringify(body)
+            body: JSON.stringify({ name })
         });
         if (response.status === 201 || response.ok) {
             addIngredientInput.value = "";
             await getIngredients();
-            alert("Ingredient added");
+            notify("Ingredient added");
         } else {
             const msg = await response.text().catch(() => "");
             alert(msg || "Failed to add ingredients");
         }
     } catch (err) {
         console.error("Add ingredient error:", err);
-        alert("Add ingredient failed");
+        notify("Add ingredient failed");
     }
 }
 
@@ -104,7 +104,7 @@ async function getIngredients() {
             headers: ingredientHeaders(),
         });
         if (response.status === 201 || response.ok) {
-            const data = await response.text().catch(() => "");
+            const data = await response.json().catch(() => "");
             ingredients = data;
             refreshIngredientList();
         } else {
@@ -148,19 +148,19 @@ async function deleteIngredient() {
         const url = `${BASE_URL}/ingredients/${encodeURIComponent(match.id)}`;
         const response = await fetch(url, {
             method: "DELETE",
-            header: ingredientHeaders(),
+            headers: ingredientHeaders(),
         });
         if (response.ok) {
             deleteIngredientInput.value = "";
             await getIngredients();
-            alert("Ingredient deleted");
+            notify("Ingredient deleted");
         } else {
             const msg = await response.text().catch(() => "");
             alert(msg || "Failed to delete ingredient");
         }
     } catch (err) {
-        console.error("Delte error:", err);
-        alert("Delete failed");
+        console.error("Delete error:", err);
+        notify("Delete failed");
     }
 }
 

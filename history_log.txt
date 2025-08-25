@@ -1,7 +1,7 @@
-commit 873ab661a313c2786fd096ff7dac2b8e69507f6b
+commit faa85f22e3b5d7ea6fe48f220fb23a98534e9fdb
 Author: yoonmgyg <yoonmgyg@gmail.com>
-Date:   Mon Aug 25 18:15:53 2025 +0000
+Date:   Mon Aug 25 18:50:15 2025 +0000
 
-    Added relative paths
+    Fixed typos and href
 
- 5 files changed, 8 insertions(+), 8 deletions(-)
+ 13 files changed, 46 insertions(+), 40 deletions(-)

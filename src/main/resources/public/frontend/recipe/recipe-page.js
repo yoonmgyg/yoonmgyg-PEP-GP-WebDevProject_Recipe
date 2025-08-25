@@ -81,7 +81,7 @@ window.addEventListener("DOMContentLoaded", () => {
      * - Read search term from input field
      * - Send GET request with name query param
      * - Update the recipe list using refreshRecipeList()
-     * - Handle fetch errors and alert user
+     * - Handle fetch errors and notify user
      */
     async function searchRecipes() {
         // Implement search logic here
@@ -96,7 +96,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if (!response.ok) {
             const msg = await response.text().catch(() => "");
-            alert(msg || "Search response was not successful");
+            notify(msg || "Search response was not successful");
             return;
         }
         const data = await response.json().catch(() => []);
@@ -104,7 +104,7 @@ window.addEventListener("DOMContentLoaded", () => {
         refreshRecipeList();
        } catch (err) {
         console.error("Search error:", err);
-        alert("Search failed");
+        notify("Search failed");
        }
     }
 
@@ -121,7 +121,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const name = addNameInput.value.trim();
         const instructions = addInstrInput.value.trim();
         if (!name || !instructions) {
-            alert("Invalid name and instructions");
+            notify("Invalid name and instructions");
             return;
         }
 
@@ -137,14 +137,14 @@ window.addEventListener("DOMContentLoaded", () => {
                 addNameInput.value = "";
                 addInstrInput.value = "";
                 await getRecipes();
-                alert("Recipe added");
+                notify("Recipe added");
             } else {
                 const msg = await response.text().catch(() => "");
-                alert(msg || "Failed to add recipe");
+                notify(msg || "Failed to add recipe");
             } 
         } catch (err) {
             console.error("Add recipe error:", err);
-            alert("Add recipe failed");
+            notify("Add recipe failed");
         }
 
     }
@@ -162,7 +162,7 @@ window.addEventListener("DOMContentLoaded", () => {
         const name = updateNameInput.value.trim();
         const instructions = updateInstrInput.value.trim();
         if (!name || !instructions) {
-            alert("Invalid name and instructions");
+            notify("Invalid name and instructions");
             return;
         }
 
@@ -171,7 +171,7 @@ window.addEventListener("DOMContentLoaded", () => {
             if (!recipes.length) await getRecipes();
             const match = recipes.find(r => String(r.name).toLowerCase() === name.toLowerCase());
             if (!match) {
-                alert("Could not find a match for the recipe");
+                notify("Could not find a match for the recipe");
                 return;
             }
 
@@ -186,14 +186,14 @@ window.addEventListener("DOMContentLoaded", () => {
                 updateNameInput.value = "";
                 updateInstrInput.value = "";
                 await getRecipes();
-                alert("Recipe updated");
+                notify("Recipe updated");
             } else {
                 const msg = await response.text().catch(() => "");
-                alert(msg || "Failed to update recipe");
+                notify(msg || "Failed to update recipe");
             }
         } catch (err) {
             console.error("Update error:", err);
-            alert("Update failed");
+            notify("Update failed");
         }
     }
 
@@ -205,20 +205,16 @@ window.addEventListener("DOMContentLoaded", () => {
      * - On success: refresh the list
      */
     async function deleteRecipe() {        
-        if (sessionStorage.getItem("isAdmin") !== "true") {
-            alert("Not authorized to delete recipes.");
-            return;
-        }
         const name =  deleteNameInput.value.trim();
         if (!name) {
-            alert("Invalid name");
+            notify("Invalid name");
             return;
         }
         try {
             if (!recipes.length) await getRecipes();
             const match = recipes.find(r => String(r.name).toLowerCase() === name.toLowerCase());
             if (!match) {
-                alert("Could not find a match for the recipe");
+                notify("Could not find a match for the recipe");
                 return;
             }
 
@@ -231,14 +227,14 @@ window.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                 deleteNameInput.value = "";
                 await getRecipes();
-                alert("Recipe deleted");
+                notify("Recipe deleted");
             } else {
                 const msg = await response.text().catch(() => "");
-                alert(msg || "Failed to delete recipe");
+                notify(msg || "Failed to delete recipe");
             }
         } catch (err) {
             console.error("Delete error:", err);
-            alert("Delete failed");
+            notify("Delete failed");
         }
     }
 
@@ -258,7 +254,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if (!response.ok) {
             const msg = await response.text().catch(() => "");
-            alert(msg || "Failed to get recipes");
+            notify(msg || "Failed to get recipes");
             return;
         }
         const data = await response.json().catch(() => []);
@@ -266,7 +262,7 @@ window.addEventListener("DOMContentLoaded", () => {
         refreshRecipeList();
        } catch (err) {
         console.error("Get error:", err);
-        alert("Get failed");
+        notify("Get failed");
        }
     }
 
@@ -293,7 +289,7 @@ window.addEventListener("DOMContentLoaded", () => {
      * - Send POST request to /logout
      * - Use Bearer token from sessionStorage
      * - On success: clear sessionStorage and redirect to login
-     * - On failure: alert the user
+     * - On failure: notify the user
      */
     async function processLogout() {
        try {
@@ -305,12 +301,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if (!response.ok) {
             const msg = await response.text().catch(() => "");
-            alert(msg || "Failed to logout");
+            notify(msg || "Failed to logout");
             return;
         }
        } catch (err) {
         console.error("Logout error:", err);
-        alert("Logout failed");
+        notify("Logout failed");
        } finally {
         sessionStorage.removeItem("auth-token");
         sessionStorage.removeItem("is-admin");
