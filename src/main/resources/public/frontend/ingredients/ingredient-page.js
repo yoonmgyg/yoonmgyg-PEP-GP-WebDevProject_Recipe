@@ -25,7 +25,7 @@ const searchInput = document.getElementById("search-input");
 const adminLink = document.getElementById("back-link");
 
 const getAuth = () => sessionStorage.getItem("auth-token") || "";
-const isAdmin = () => sessionStorage.getItem("isAdmin") === "true";
+const isAdmin = () => sessionStorage.getItem("is-admin") === "true";
 const ingredientHeaders = () => {
     const head = { "Content-Type": "application/json" }
     const token = getAuth();
@@ -145,7 +145,7 @@ async function deleteIngredient() {
             return;
         }
 
-        const url = `${BASE_URL}/recipes/${encodeURIComponent(match.id)}`;
+        const url = `${BASE_URL}/ingredients/${encodeURIComponent(match.id)}`;
         const response = await fetch(url, {
             method: "DELETE",
             header: ingredientHeaders(),
@@ -180,9 +180,7 @@ function refreshIngredientList() {
     ingredientListContainer.innerHTML = "";
     ingredients.forEach(r => {
         const li = document.createElement("li");
-        const name = r.name;
-        const instructions = r.instructions;
-        li.textContent = `${name}: ${instructions}`;
+        li.textContent = r.name;
         ingredientListContainer.appendChild(li);
     });
 }

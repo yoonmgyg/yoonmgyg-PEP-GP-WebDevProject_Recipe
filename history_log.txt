@@ -1,7 +1,7 @@
-commit 51c1176718f31a328d7f52b0a7274c84165859b4
+commit 873ab661a313c2786fd096ff7dac2b8e69507f6b
 Author: yoonmgyg <yoonmgyg@gmail.com>
-Date:   Mon Aug 25 18:01:27 2025 +0000
+Date:   Mon Aug 25 18:15:53 2025 +0000
 
-    Implemented basic functionality
+    Added relative paths
 
- 11 files changed, 701 insertions(+), 56 deletions(-)
+ 5 files changed, 8 insertions(+), 8 deletions(-)

@@ -38,7 +38,7 @@ window.addEventListener("DOMContentLoaded", () => {
      * TODO: Show logout button if auth-token exists in sessionStorage
      */
     const getAuth = () => sessionStorage.getItem("auth-token") || "";
-    const isAdmin = () => sessionStorage.getItem("isAdmin") === "true";
+    const isAdmin = () => sessionStorage.getItem("is-admin") === "true";
     const recipeHeaders = () => {
         const head = { "Content-Type": "application/json" }
         const token = getAuth();
@@ -205,6 +205,10 @@ window.addEventListener("DOMContentLoaded", () => {
      * - On success: refresh the list
      */
     async function deleteRecipe() {        
+        if (sessionStorage.getItem("isAdmin") !== "true") {
+            alert("Not authorized to delete recipes.");
+            return;
+        }
         const name =  deleteNameInput.value.trim();
         if (!name) {
             alert("Invalid name");
@@ -309,8 +313,8 @@ window.addEventListener("DOMContentLoaded", () => {
         alert("Logout failed");
        } finally {
         sessionStorage.removeItem("auth-token");
-        sessionStorage.removeItem("isAdmin");
-        window.location.href = "login.html";
+        sessionStorage.removeItem("is-admin");
+        window.location.href = "../login/login-page.html";
        }
     }
 

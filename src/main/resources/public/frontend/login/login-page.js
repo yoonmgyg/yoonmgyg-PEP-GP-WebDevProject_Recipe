@@ -11,15 +11,16 @@ const BASE_URL = "http://localhost:8081"; // backend URL
  * - login button
  * - logout button (optional, for token testing)
  */
+
 const usernameInput = document.getElementById("login-input");
 const passwordInput = document.getElementById("password-input");
 const loginButton = document.getElementById("login-button");
 const logoutButton = document.getElementById("logout-button");
 
 /* 
- * TODO: Add click event listener to login button
- * - Call processLogin on click
- */
+* TODO: Add click event listener to login button
+* - Call processLogin on click
+*/
 if (loginButton) loginButton.addEventListener("click", processLogin);
 
 
@@ -78,8 +79,9 @@ async function processLogin(event) {
         if (response.status == 200) {
             const text = await response.text();
             const [token, isAdmin] = text.split(/\s+/);
+
             sessionStorage.setItem("auth-token", token || "");
-            sessionStorage.setItem("isAdmin", String(isAdmin));
+            sessionStorage.setItem("is-admin", String(isAdmin));
             // TODO: Optionally show the logout button if applicable
             if (logoutButton) {
                 logoutButton.style.display = "inline-block";
@@ -87,7 +89,7 @@ async function processLogin(event) {
             // TODO: Add a small delay (e.g., 500ms) using setTimeout before redirecting
             // - Use window.location.href to redirect to the recipe page
             setTimeout(() => {
-                window.location.href="http://localhost:8081/frontend/recipes/recipe-page.html";
+                window.location.href="../recipe/recipe-page.html";
             }, 500);
             return;
         }
@@ -112,4 +114,5 @@ async function processLogin(event) {
         alert("Login error");
     }
 }
+
 
